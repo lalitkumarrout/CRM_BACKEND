@@ -1,18 +1,18 @@
-
+require('dotenv').config();
 let Client = require('node-rest-client').Client;
 let client = new Client();
-const notficationServiceUrl = "http://localhost:8080/notificationService/api/v1/notification";
+const notficationServiceUrl = process.env.NOTIFICATION_SERVICE_URL || "http://localhost:8080/notificationService/api/v1/notification";
 
-const sendNotification = (subject, content, recepientEmails, requester, ticketId) =>{
+const sendNotification = (subject, content, recepientEmails, requester, ticketId) => {
     const reqBody = {
-        subject, 
-        content, 
-        recepientEmails, 
-        requester, 
+        subject,
+        content,
+        recepientEmails,
+        requester,
         ticketId
     };
     const headers = { "Content-Type": "application/json" };
-    const args ={
+    const args = {
         data: reqBody,
         headers: headers
     }
@@ -22,4 +22,4 @@ const sendNotification = (subject, content, recepientEmails, requester, ticketId
     });
 }
 
-module.exports= sendNotification;
+module.exports = sendNotification;
