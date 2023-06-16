@@ -81,9 +81,14 @@ const getOneTicket = async(data) => {
 
 }
 
-const getAllTicktes = async() =>{
+const getAllTicktes = async(userInfo) =>{
     try{
-        const response = await Ticket.find();
+        var response;
+        if(userInfo.userType === "customer"){
+            response = await Ticket.find({clientName: userInfo.clientName});
+            return response;
+        }
+        response = await Ticket.find();
         return response;
     }
     catch(err){
@@ -114,20 +119,22 @@ const updateTicketById = async(ticketIdInfo, ticketInfo, currentUser) =>{
 
         const filter = { _id: ticketIdInfo.id };
         const update = ticketInfo;
-        if(update.assignee != currentUser.email){
+        if( update.assignee && update.assignee != currentUser.email){
             return {
                 error: "assignee is invalid"
             }
         }
 
-        if(update.assignedTo && UserService.isValidActiveUser(update.assignedTo)){
-            update.assignee = currentUser.email;
-        }else{
-            return {
-                error: "Invalid assignedTo user"
+        if(update.assignedTo && validateTicket.assignedTo!== update.assignedTo ){
+            if(UserService.isValidActiveUser(update.assignedTo)){
+                update.assignee = currentUser.email;
+            }else{
+                return {
+                    error: "Invalid assignedTo user"
+                }
             }
         }
-
+            
         //previousAssignedToUser
         await User.findOneAndUpdate({email:validateTicket.assignedTo}, {
             $pull:{

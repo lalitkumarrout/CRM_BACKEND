@@ -35,7 +35,7 @@ const getOneTicket =  async(req, res)=>{
 
 const getAllTicktes = async(req, res) =>{
     try{
-        const response = await ticketService.getAllTicktes();
+        const response = await ticketService.getAllTicktes(req.user);
         if(response.error){
             res.status(401).send({
                 result: response.error
@@ -93,6 +93,26 @@ const getMyAllAssignedTickets = async(req, res) =>{
     }
 }
 
+const getMyAllCreatedTickets = async(req, res) =>{
+    try{
+        const response = await userService.getAllCreatedTicketsOfUser(req.user);
+        if(response.error){
+            res.status(401).send({
+                result: response.error
+            })
+        }else{
+            res.status(201).send({
+                result: response
+            })
+        }
+    }
+    catch(err){
+        res.status(500).send({
+            result: err
+        })
+    }
+}
+
 const updateTicketById = async(req, res) =>{
     try{
         const response = await ticketService.updateTicketById(req.params, req.body, req.user);
@@ -115,4 +135,4 @@ const updateTicketById = async(req, res) =>{
 
 module.exports = {createTicket, getOneTicket,
     getAllTicktes, getAllTicketsByStatus,
-     getMyAllAssignedTickets, updateTicketById}
+     getMyAllAssignedTickets, getMyAllCreatedTickets, updateTicketById}

@@ -20,6 +20,10 @@ const userSchema = new Schema({
         match: /\S+@\S+\.\S+/,
         lowercase: true
     },
+    clientName:{ //company's name by/for which this ticket is created
+        type: String,
+        required: true
+    },
     createdAt:{
         type: Date,
         immutable: true,
@@ -38,7 +42,8 @@ const userSchema = new Schema({
    userStatus:{
     type: String,
     required: true,
-    default: "approved"
+    default: "approved",
+    enum: ["approved", "suspended", "rejected"]
    },
    ticketsCreated:{
     type: [mongoose.Types.ObjectId],

@@ -1,7 +1,7 @@
 const ticketController = require('../controllers/ticket.controller');
 const authValidators = require("../moddlewares/auth.validator");
 
-module.exports = function (app) {
+module.exports = function(app){
     app.post('/crmapp/api/v1/ticket/', authValidators.isUserAuthenticated, ticketController.createTicket);
 
     //get all tickets assigned to current user
@@ -9,14 +9,14 @@ module.exports = function (app) {
 
 
     //get all tickets created by current user
+    app.get('/crmapp/api/v1/getMyCreatedTickets/', authValidators.isUserAuthenticated, ticketController.getMyAllCreatedTickets);
+
+    //get all //every type of user can get all the tickets, but customer will get all the tickets which has clientName as user's clientName
+    app.get('/crmapp/api/v1/ticket/', authValidators.isUserAuthenticated, ticketController.getAllTicktes);
 
 
-    //get all //only admin can get all the tickets
-    app.get('/crmapp/api/v1/ticket/', authValidators.isUserAuthenticated, authValidators.isAdmin, ticketController.getAllTicktes);
-
-
-    //get all tickets by status //only admin can get all the tickets
-    app.get('/crmapp/api/v1/ticketbystatus/:status', authValidators.isUserAuthenticated, authValidators.isAdmin, ticketController.getAllTicketsByStatus);
+    //get all tickets by status //only admin and engineer can get all the tickets
+    app.get('/crmapp/api/v1/ticketbystatus/:status', authValidators.isUserAuthenticated, authValidators.isAdminOrEngineer, ticketController.getAllTicketsByStatus);
 
 
     //get all details of one ticket by id
