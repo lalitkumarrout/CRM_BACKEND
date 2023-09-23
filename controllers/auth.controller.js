@@ -34,6 +34,7 @@ exports.signin = async(req, res) =>{
             response = result.error;
         }else{
             statusCode = 201;
+            console.log(req.body, process.env.JWT_SECRET_KEY)
             const token = jwt.sign({email: req.body.email}, process.env.JWT_SECRET_KEY);
             response = {
                 message: "user validated",
@@ -44,6 +45,7 @@ exports.signin = async(req, res) =>{
         }
         res.status(statusCode).send(response);
     }catch(err){
+        console.log(err);
         res.status(500).send(err)
     }
 }

@@ -157,16 +157,16 @@ const updateTicketById = async(ticketIdInfo, ticketInfo, currentUser) =>{
             }
         );
 
-        const sendNotificationEmailObject = {
-            subject: "A ticket is updated: " + response.title, 
-            content: "Ticket Description : " + response.description, 
-            recepientEmails: [response.createdBy, response.assignedTo], 
-            requester: response.createdBy, 
-            ticketId: response._id
-        }
+        // const sendNotificationEmailObject = {
+        //     subject: "A ticket is updated: " + response.title, 
+        //     content: "Ticket Description : " + response.description, 
+        //     recepientEmails: [response.createdBy, response.assignedTo], 
+        //     requester: response.createdBy, 
+        //     ticketId: response._id
+        // }
 
-        sendNotification(sendNotificationEmailObject.subject, sendNotificationEmailObject.content, 
-            sendNotificationEmailObject.recepientEmails, sendNotificationEmailObject.requester, sendNotificationEmailObject.ticketId);
+        // sendNotification(sendNotificationEmailObject.subject, sendNotificationEmailObject.content, 
+        //     sendNotificationEmailObject.recepientEmails, sendNotificationEmailObject.requester, sendNotificationEmailObject.ticketId);
 
         return response;
     }
