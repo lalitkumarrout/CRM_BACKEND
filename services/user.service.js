@@ -68,6 +68,22 @@ const getUserByEmail = async(data) => {
     }
 }
 
+const getValidActiveUser = async () => {
+    try {
+        const users = await User.find({
+            userStatus: "approved",
+            userType: "engineer"
+        });
+        console.log(users);
+        if(users.length == 0) return {
+            error: "no valid assignable user found"
+        }
+        return users[(Math.floor(Math.random() * users.length))]
+    } catch(error) {
+        return error.message;
+    }
+}
+
 const isValidActiveUser = async(data) =>{
     try{
         //get the user by email
@@ -316,6 +332,7 @@ const getAllCreatedTicketsOfUser = async(userInfo) =>{
 module.exports = {createUser, 
     verifyUser, getUserByEmail, 
     getAllUsers, getUserByUserId, 
+    getValidActiveUser,
     updateUserType, isValidActiveUser, 
     addNewTicketCreatedByUser, addTicketAssignedToUser, 
     validateTicketId, getAllAssignedTicketsOfUser, getAllCreatedTicketsOfUser, updateUser}

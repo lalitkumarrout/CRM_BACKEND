@@ -5,23 +5,25 @@ const sendNotification = require('../Utils/notificationServiceClient');
 
 const createTicket = async(data, userData) =>{
     try{
-        const validateAssignedTo = data.assignedTo? await UserService.isValidActiveUser({email: data.assignedTo}) : true;
-        if(validateAssignedTo.error){
+        const validAssignedTo =  await UserService.getValidActiveUser();
+        console.log("val", validAssignedTo)
+        if(validAssignedTo.error){
             return {
                 error:{
-                    assignedTo: validateAssignedTo.error 
+                    assignedTo: validAssignedTo.error 
                 }
             }
         }
+        
         const ticketObj = {
             title: data.title,
             description: data.description,
             status: data.status,
             ticketPriority: data.ticketPriority,
-            assignee:userData.email,
-            assignedTo:data.assignedTo,
+            assignee:userData.email, // NM
+            assignedTo:validAssignedTo.email,
             clientName:data.clientName,
-            createdBy: userData.email,  
+            createdBy: userData.email,  // NM
         }
         const ticketResponse = await Ticket.create(ticketObj);
         if(ticketResponse){
@@ -119,16 +121,11 @@ const updateTicketById = async(ticketIdInfo, ticketInfo, currentUser) =>{
 
         const filter = { _id: ticketIdInfo.id };
         const update = ticketInfo;
-        if( update.assignee && update.assignee != currentUser.email){
-            return {
-                error: "assignee is invalid"
-            }
-        }
+        console.log(currentUser, update, validateTicket);
 
-        if(update.assignedTo && validateTicket.assignedTo!== update.assignedTo ){
-            if(UserService.isValidActiveUser(update.assignedTo)){
-                update.assignee = currentUser.email;
-            }else{
+        console.log(validateTicket.assignedTo != currentUser.email, validateTicket.assignee != currentUser.email)
+        if(validateTicket.assignedTo != currentUser.email && validateTicket.assignee != currentUser.email) {
+            if(!currentUser.userType != 'admin' ) {
                 return {
                     error: "Invalid assignedTo user"
                 }
