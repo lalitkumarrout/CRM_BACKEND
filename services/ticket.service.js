@@ -42,15 +42,15 @@ const createTicket = async(data, userData) =>{
                     }
                 }
             }
-            const sendNotificationEmailObject = {
-                subject: "A new ticket is created: " + ticketResponse.title, 
-                content: "Ticket Description : " + ticketResponse.description, 
-                recepientEmails: [ticketResponse.createdBy, ticketResponse.assignedTo], 
-                requester: ticketResponse.createdBy, 
-                ticketId: ticketResponse._id
-            }
-            sendNotification(sendNotificationEmailObject.subject, sendNotificationEmailObject.content, 
-                sendNotificationEmailObject.recepientEmails, sendNotificationEmailObject.requester, sendNotificationEmailObject.ticketId);
+            // const sendNotificationEmailObject = {
+            //     subject: "A new ticket is created: " + ticketResponse.title, 
+            //     content: "Ticket Description : " + ticketResponse.description, 
+            //     recepientEmails: [ticketResponse.createdBy, ticketResponse.assignedTo], 
+            //     requester: ticketResponse.createdBy, 
+            //     ticketId: ticketResponse._id
+            // }
+            // sendNotification(sendNotificationEmailObject.subject, sendNotificationEmailObject.content, 
+            //     sendNotificationEmailObject.recepientEmails, sendNotificationEmailObject.requester, sendNotificationEmailObject.ticketId);
 
             return ticketResponse;
         }
